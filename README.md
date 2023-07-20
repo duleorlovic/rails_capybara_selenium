@@ -67,8 +67,49 @@ and if you want to run locally
 USE_HEADFULL_CHROME=true rails test:system
 ```
 
-For Rspec you need to configure inside `spec` folder
+For Rspec you need to configure inside `spec` folder so after installing rspec
 
 ```
-# s
+bundle add rspec-rails --group "development, test"
+rails generate rspec:install
+git add . && git commit -m'rails generate rspec:install'
+```
+
+you can configure
+
+```
+# spec/support/capybara_selenium.rb
+# https://github.com/duleorlovic/rails_capybara_selenium/blob/main/spec/support/capybara_selenium.rb
+RSpec.configure do |config|
+  config.before :each, type: :system do
+    if ENV["USE_HEADFULL_CHROME"].present?
+      # Use chrome only on local machine since CI will fail
+      # export USE_HEADFULL_CHROME=true
+      # rails test:system
+      # unset USE_HEADFULL_CHROME
+      driven_by :selenium, using: :chrome, screen_size: [1400, 1400]
+    else
+      # driven_by :selenium_chrome_headless
+      driven_by :selenium, using: :headless_chrome, screen_size: [1400, 1400]
+    end
+  end
+end
+```
+so you can run sample system test in headless mode
+```
+# spect/system/articles_spec.rb
+require 'rails_helper'
+
+RSpec.describe "Articles", type: :system do
+  it "see articles page" do
+    visit articles_path
+    expect(page.body).to include  "Articles"
+  end
+end
+```
+
+with
+```
+rspec spec/system/articles_spec.rb
+USE_HEADFULL_CHROME=true rspec spec/system/articles_spec.rb
 ```
