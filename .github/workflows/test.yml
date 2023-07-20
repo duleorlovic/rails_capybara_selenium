@@ -1,0 +1,23 @@
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ruby/setup-ruby@v1
+    # this is already present on ubuntu latest
+    # - name: Set up Chrome
+    #   run: |
+    #     wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+    #     sudo apt-get update && sudo apt-get install -y xvfb google-chrome-stable
+    - name: Install dependencies
+      run: |
+        gem install bundler
+        bundle install --jobs 4 --retry 3
+    - name: Setup test database
+      run: |
+        bin/rails db:create db:migrate
+    - name: Run tests
+      run: |
+        bundle exec rake
+
