@@ -66,3 +66,9 @@ and if you want to run locally
 ```
 USE_HEADFULL_CHROME=true rails test:system
 ```
+
+For Rspec you need to configure inside `spec` folder
+
+```
+# s
+```
