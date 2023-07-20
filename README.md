@@ -17,7 +17,7 @@ this will detect your chrome and install appropriate webdriver binary to
 
 ## Chrome version
 
-If you run any rake task and you got an error:
+If you run browser test (eg `rails test:system`) and you got an error:
 ```
 Webdrivers::VersionError: Unable to find latest point release version for 115.0.5790. You appear to be using a non-production version of Chrome. Please set `Webdrivers::Chromedriver.required_version = <desired driver version>` to a known chromedriver version: https://chromedriver.storage.googleapis.com/index.html
 
@@ -34,9 +34,10 @@ https://chromedriver.storage.googleapis.com/LATEST_RELEASE for example
 old driver will work with latest chrome)
 ~~~
 # config/initializers/webdrivers.rb
+# https://github.com/duleorlovic/rails_capybara_selenium/blob/main/config/initializers/webdrivers.rb
 if defined? Webdrivers
-  # if you have latest chrome for which webdriver is not yet builded, ie greater
-  # then https://chromedriver.storage.googleapis.com/LATEST_RELEASE
+  # When you have latest chrome for which webdriver is not yet builded, ie
+  # greater then https://chromedriver.storage.googleapis.com/LATEST_RELEASE
   # than put this line in .bashrc since old driver will probably work fine
   # export CHROMEDRIVER_VERSION="114.0.5735.90"
   Webdrivers::Chromedriver.required_version = ENV["CHROMEDRIVER_VERSION"]
